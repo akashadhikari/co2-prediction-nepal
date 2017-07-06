@@ -17,7 +17,6 @@ ylabel('Emission-(metric tons per capita)')
 xlabel('Years')
 
 % Gradient descent
-% usage of stochastic gradient descent is only appropriate on large datasets
 x = [ones(m, 1) x]; % Add a column of ones to x
 theta = zeros(size(x(1,:)))'; % initialize fitting parameters
 MAX_ITR = 1500;
