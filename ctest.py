@@ -1,35 +1,34 @@
-import numpy as np
-import random
-from sklearn.datasets.samples_generator import make_regression 
-import pylab
-from scipy import stats
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
-def gradient_descent_2(alpha, x, y, numIterations):
-    m = x.shape[0] # number of samples
-    theta = np.ones(2)
-    x_transpose = x.transpose()
-    for iter in range(0, numIterations):
-        hypothesis = np.dot(x, theta)
-        loss = hypothesis - y
-        J = np.sum(loss ** 2) / (2 * m)  # cost
-        print ("iter %s | J: %.3f" % (iter, J))
-        gradient = np.dot(x_transpose, loss) / m
-        theta = theta - alpha * gradient  # update
-    return theta
+import tensorflow as tf
 
-if __name__ == '__main__':
+# Model parameters
+m = tf.Variable([.3], dtype=tf.float32)
+b = tf.Variable([-.3], dtype=tf.float32)
+# Model input and output
+x = tf.placeholder(tf.float32)
+linear_model = m * x + b
+y = tf.placeholder(tf.float32)
 
-    x, y = make_regression(n_samples=100, n_features=1, n_informative=1,
-                        random_state=0, noise=35)
-    m, n = np.shape(x)
-    x = np.c_[ np.ones(m), x] # insert column
-    alpha = 0.01 # learning rate
-    theta = gradient_descent_2(alpha, x, y, 1000)
+# loss
+loss = tf.reduce_sum(tf.square(linear_model - y)) # sum of the squares
+# optimizer
+optimizer = tf.train.GradientDescentOptimizer(0.01)
+train = optimizer.minimize(loss)
 
-    # plot
-    for i in range(x.shape[1]):
-        y_predict = theta[0] + theta[1]*x
-    pylab.plot(x[:,1],y,'o')
-    pylab.plot(x,y_predict,'k-')
-    pylab.show()
-    print ("Done!")
+# training data
+x_train = [0, 1, 2, 3]
+y_train = [1, 2, 3, 4]
+# training loop
+init = tf.global_variables_initializer()
+sess = tf.Session()
+sess.run(init) # reset values to wrong
+for i in range(1000):
+  sess.run(train, {x: x_train, y: y_train})
+
+# evaluate training accuracy
+curr_m, curr_b, curr_loss = sess.run([m, b, loss], {x: x_train, y: y_train})
+print("m: %s b: %s loss: %s"%(curr_m, curr_b, curr_loss))
+
+
