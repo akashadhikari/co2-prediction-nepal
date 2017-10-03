@@ -30,5 +30,3 @@ for i in range(1000):
 # evaluate training accuracy
 curr_m, curr_b, curr_loss = sess.run([m, b, loss], {x: x_train, y: y_train})
 print("m: %s b: %s loss: %s"%(curr_m, curr_b, curr_loss))
-
-
