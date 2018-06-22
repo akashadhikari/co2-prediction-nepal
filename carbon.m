@@ -3,7 +3,7 @@
 % y label refers to carbon-dioxide emission
 
 clear all; close all; clc
-x = load('1co2.dat'); y = load('2co2.dat');
+x = load('data/1co2.dat'); y = load('data/2co2.dat');
 
 m = length(y); % number of training examples
 
